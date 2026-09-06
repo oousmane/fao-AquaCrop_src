@@ -1,0 +1,5 @@
+# Runtime dependency
+numpy>=1.26
+
+# Build dependency: freezes the source into a standalone executable (aquacrop.spec)
+pyinstaller>=6.10
