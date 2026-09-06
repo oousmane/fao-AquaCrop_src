@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, TextIO
 from sys import float_info
 from dataclasses import dataclass, field
 from .kinds import intEnum
