@@ -181,7 +181,7 @@ def GetSetofThree(DayN, Deci, Monthi, Yeari, C1, C2, C3):
 
     return C1, C2, C3
 
-def GetSetofThreeMonths(Monthi, Yeari, C1, C2, C3, X1, X2, X3, t1):
+def GetSetofThreeMonthsETo(Monthi, Yeari, C1, C2, C3, X1, X2, X3, t1):
     ni = 30
 
     full_path = os.path.normpath(
@@ -363,7 +363,7 @@ def GetMonthlyEToDataSet(DayNri, EToDataSet):
 
     # GetMonthlyEToDataSet
     Dayi, Monthi, Yeari = DetermineDate(DayNri)
-    C1, C2, C3, X1, X2, X3, t1 = GetSetofThreeMonths(Monthi, Yeari, C1, C2, C3, X1, X2, X3, t1)
+    C1, C2, C3, X1, X2, X3, t1 = GetSetofThreeMonthsETo(Monthi, Yeari, C1, C2, C3, X1, X2, X3, t1)
 
     Dayi = 1
     DNR = DetermineDayNr(Dayi, Monthi, Yeari)

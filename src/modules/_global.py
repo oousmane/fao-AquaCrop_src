@@ -1,4 +1,4 @@
-from typing import Optional, List
+from typing import Optional
 from sys import float_info
 from dataclasses import dataclass, field
 from .kinds import intEnum
@@ -447,8 +447,16 @@ def dbg_r(name, val):
     # 17 decimales tipo Fortran “alta precisión”, sin espacios
     print(f"{name}={val:.17f}")
 
-# TESTCASE DIR
-complete_path_dir = "../testcase/"
+# PATH
+
+# Data dirs (LIST/, OUTP/, PARAM/, SIMUL/): next to the executable when frozen,
+# else <project root>/testcase/. Trailing separator required: callers concatenate.
+if getattr(sys, "frozen", False):
+    complete_path_dir = os.path.dirname(os.path.abspath(sys.executable)) + os.sep
+else:
+    _this_dir = os.path.dirname(os.path.abspath(__file__))
+    complete_path_dir = os.path.join(_this_dir, "..", "..", "testcase") + os.sep
+
 
 # Calendar -> Global variables
 CalendarDescription: Optional[str] = None
@@ -836,9 +844,9 @@ RootZoneSalt = rep_RootZoneSalt()
 class rep_IniSWC:
     AtDepths: bool = False
     NrLoc: int = 0
-    Loc: List[float] = field(default_factory=lambda: [undef_double] * max_No_compartments)       # depth or layer thickness [m]
-    VolProc: List[float] = field(default_factory=lambda: [undef_double] * max_No_compartments)   # soil water content (vol%)
-    SaltECe: List[float] = field(default_factory=lambda: [undef_double] * max_No_compartments)   # ECe in dS/m
+    Loc: list[float] = field(default_factory=lambda: [undef_double] * max_No_compartments)       # depth or layer thickness [m]
+    VolProc: list[float] = field(default_factory=lambda: [undef_double] * max_No_compartments)   # soil water content (vol%)
+    SaltECe: list[float] = field(default_factory=lambda: [undef_double] * max_No_compartments)   # ECe in dS/m
     AtFC: bool = False
 
 
@@ -862,8 +870,8 @@ class rep_sim:
     FromDayNr: int = 0
     ToDayNr: int = 0
     IniSWC: rep_IniSWC = field(default_factory=rep_IniSWC)
-    ThetaIni: List[float] = field(default_factory=lambda: [undef_double] * max_No_compartments)
-    ECeIni: List[float] = field(default_factory=lambda: [undef_double] * max_No_compartments)
+    ThetaIni: list[float] = field(default_factory=lambda: [undef_double] * max_No_compartments)
+    ECeIni: list[float] = field(default_factory=lambda: [undef_double] * max_No_compartments)
     SurfaceStorageIni: float = 0.0
     ECStorageIni: float = 0.0
     CCini: float = 0.0
@@ -1046,7 +1054,7 @@ class rep_param:
     ## Percentage of soil surface wetted by irrigation off-season
 
     ## Showers parameters (10-day or monthly rainfall) IN SHOWERS.PAR
-    ShowersInDecade: List[int] = field(default_factory=lambda: [0]*12)
+    ShowersInDecade: list[int] = field(default_factory=lambda: [0]*12)
     ## 10-day or Monthly rainfall --> Runoff estimate
 
     EffectiveRain: rep_EffectiveRain = field(default_factory=rep_EffectiveRain)
@@ -1110,10 +1118,10 @@ class CompartmentIndividual:
 
     # Salinity factors
     # Salt content in solution in cells (g/m2)
-    Salt: List[float] = field(default_factory=lambda: [0.0]*11)
+    Salt: list[float] = field(default_factory=lambda: [0.0]*11)
 
     # Salt deposit in cells (g/m2)
-    Depo: List[float] = field(default_factory=lambda: [0.0]*11)
+    Depo: list[float] = field(default_factory=lambda: [0.0]*11)
 
 @dataclass
 class rep_soil:    
@@ -1136,7 +1144,7 @@ class SoilLayerIndividual:
     GravelVol: float = undef_double           # volume percentage of gravel
     WaterContent: float = undef_double        # mm
     Macro: int = undef_int                    # Macropores: from Saturation to Macro [vol%]
-    SaltMobility: List[float] = field(default_factory=lambda: [0.0]*11)  # Mobility of salt (11 cells)
+    SaltMobility: list[float] = field(default_factory=lambda: [0.0]*11)  # Mobility of salt (11 cells)
     SC: int = undef_int                       # number of Salt cells (0..SC/(SC+2)*SAT vol%)
     SCP1: int = undef_int                     # SC + 1 (extra salt cell)
     UL: float = undef_double                  # Upper Limit of SC salt cells (m3/m3)
@@ -1203,7 +1211,7 @@ class rep_Crop:
     CCEffectEvapLate: int = 0            # %
     Day1: int = 0                        # first day (from sowing/transplanting)
     DayN: int = 0                        # last day = harvest day
-    Length: List[int] = field(default_factory=lambda: [0]*4)  # four growth stages
+    Length: list[int] = field(default_factory=lambda: [0]*4)  # four growth stages
 
     RootMin: float = 0.0                 # m
     RootMax: float = 0.0                 # m

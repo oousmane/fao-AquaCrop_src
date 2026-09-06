@@ -1,6 +1,7 @@
 from ._global import *
 from . import project_input as PI
 from ._global import _strip_quotes
+from typing import Optional
 import math
 
 TemperatureFilefull_exists = False
@@ -3383,10 +3384,10 @@ def ResetCropDay1(CropDay1IN, SwitchToYear1):
     dayi, monthi, yeari = DetermineDate(CropDay1IN)
     if GetTemperatureRecord_FromY() == 1901:
         yeari = 1901
-        CropDay1OUT = DetermineDayNr(dayi, monthi, yeari, CropDay1OUT)
+        CropDay1OUT = DetermineDayNr(dayi, monthi, yeari)
     else:
         if SwitchToYear1:
-            CropDay1OUT = DetermineDayNr(dayi, monthi, GetTemperatureRecord_FromY(), CropDay1OUT)
+            CropDay1OUT = DetermineDayNr(dayi, monthi, GetTemperatureRecord_FromY())
         else:
             CropDay1OUT = CropDay1IN
 

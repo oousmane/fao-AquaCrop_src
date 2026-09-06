@@ -1,4 +1,5 @@
 from ._global import _strip_quotes
+import warnings
 
 # Module: startunit.py
 
@@ -140,7 +141,14 @@ def fProjects_open(filename, mode):
     global fProjects
     try:
         fProjects = open(filename, mode)
-    except OSError:
+    except OSError as exc:
+        # Ne pas echouer silencieusement : sans ce signal, l'erreur ne se
+        # manifeste que plus tard par un AttributeError sur fProjects.write
+        warnings.warn(
+            f"fProjects_open: impossible d'ouvrir {filename!r} ({exc.strerror})",
+            RuntimeWarning,
+            stacklevel=2,
+        )
         fProjects = None
 
 # Función completa
@@ -176,6 +184,11 @@ def fProjects_write_bulk(lines):
 # Función completa
 def fProjects_close():
     global fProjects
+    if fProjects is not None:
+        try:
+            fProjects.close()
+        except OSError:
+            pass
     fProjects = None
 
 # Función completa

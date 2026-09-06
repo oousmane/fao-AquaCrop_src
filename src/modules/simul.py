@@ -648,7 +648,7 @@ def YearWeighingFactor(CropFirstDayNr):
     Dayi = 0
     Monthi = 0
     Yeari = 0
-    DetermineDate(CropFirstDayNr, Dayi, Monthi, Yeari)
+    Dayi, Monthi, Yeari = DetermineDate(CropFirstDayNr)
     _res = Yeari
     return _res
 
@@ -3717,7 +3717,8 @@ def DetermineCCxAdjusted_Days(CCxAdjusted, CCxSF, CGCadjusted, tFinalCCx, Virtua
         GetCCiPrev(),
         GetCrop_CCoAdjusted(),
         CCxSF,
-        CGCadjusted
+        CGCadjusted,
+        VirtualTimeCC
     )
 
     # 2. Get CCxadjusted (reached at end of stretched crop development)

@@ -2,7 +2,6 @@ import os
 import numpy as np
 from ._global import *
 from . import _global as G
-from typing import Optional
 from dataclasses import dataclass
 
 def allocate_project_input(NrRuns):

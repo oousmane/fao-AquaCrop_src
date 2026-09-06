@@ -1,5 +1,4 @@
 import math
-from typing import Optional, TextIO, Tuple
 from datetime import datetime
 import errno
 import os
