@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# PyInstaller output. The .spec file is the build recipe and stays tracked.
+build/
+dist/
+
+# pycrucible: the launcher, and the payload it extracts next to itself on first run.
+launcher
+aquacrop-pyc
+pycrucible_payload/
+
+# Model output. OUTP/ itself is a required runtime directory and stays tracked.
+testcase/OUTP/*.OUT
+
+# macOS / editors
+.DS_Store
