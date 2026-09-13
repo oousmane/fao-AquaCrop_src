@@ -1,0 +1,29 @@
+[project]
+name = "aquacrop"
+version = "7.3.0"
+description = "FAO AquaCrop 7.3 crop water productivity model, Python port"
+requires-python = ">=3.13"
+dependencies = ["numpy>=1.26"]
+
+# No [build-system]: uv treats this as a virtual project, so the dependencies are
+# installed but the sources are run in place rather than built into a wheel.
+
+[tool.pycrucible]
+entrypoint = "src/aquacrop.py"
+
+[tool.pycrucible.options]
+# Keep the extracted sources next to the binary: AquaCrop resolves LIST/, PARAM/,
+# SIMUL/, OUTP/, DATA/ and OBS/ from the current directory, then from the sources.
+extract_to_temp = false
+delete_after_run = false
+debug = false
+
+[tool.pycrucible.patterns]
+include = ["src/**/*.py", "src/COPYRIGHT"]
+exclude = [
+    "**/__pycache__/**",
+    "build/**",
+    "dist/**",
+    "staging/**",
+    "testcase/**",
+]
