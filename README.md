@@ -64,13 +64,15 @@ the bundled Ottawa project.
 
 | Variable | Effect |
 | --- | --- |
-| `AQUACROP_NO_PROGRESS` | Set to any non-empty value to run without the Tk progress window. The simulation then runs on the main thread, so a failure carries its own traceback instead of being re-raised from a worker. Recommended when the model is called from another program. |
+| `AQUACROP_PROGRESS` | Set to any non-empty value to show the Tk progress window. It is off by default, since the model is normally driven by another program. |
 | `AQUACROP_DEBUG_TRACE` | Set to any non-empty value to write a run trace next to the data directories. |
 
-The PyInstaller executable never shows the window: `tkinter` is excluded from the
-frozen build, so `AQUACROP_NO_PROGRESS` is redundant there. The pycrucible
-launcher runs against a `uv` environment where `tkinter` is available, so the
-window does appear unless the variable is set.
+With no window, the simulation runs on the main thread, so a failure carries its
+own traceback instead of being re-raised from a worker.
+
+Asking for the window only gets you one where Tk is actually available. The
+PyInstaller executable excludes `tkinter`, so it never shows one; the pycrucible
+launcher runs against a `uv` environment where `tkinter` is present, so it does.
 
 ## Building a standalone executable
 
