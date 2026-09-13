@@ -1,3 +1,4 @@
+import os
 import queue
 import threading
 
@@ -64,8 +65,14 @@ def fail_progress(message: str) -> None:
     _progress_reporter.fail(message)
 
 
+def progress_disabled() -> bool:
+    # Set AQUACROP_NO_PROGRESS to run without the window, which also keeps the task
+    # on the main thread so exceptions carry their own traceback.
+    return bool(os.environ.get("AQUACROP_NO_PROGRESS", "").strip())
+
+
 def run_with_progress(task) -> None:
-    if tk is None or ttk is None:
+    if progress_disabled() or tk is None or ttk is None:
         task()
         return
 

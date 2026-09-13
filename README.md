@@ -60,6 +60,18 @@ python3 src/aquacrop.py
 With no `LIST/` in the current directory, this falls back to `testcase/` and runs
 the bundled Ottawa project.
 
+### Environment variables
+
+| Variable | Effect |
+| --- | --- |
+| `AQUACROP_NO_PROGRESS` | Set to any non-empty value to run without the Tk progress window. The simulation then runs on the main thread, so a failure carries its own traceback instead of being re-raised from a worker. Recommended when the model is called from another program. |
+| `AQUACROP_DEBUG_TRACE` | Set to any non-empty value to write a run trace next to the data directories. |
+
+The PyInstaller executable never shows the window: `tkinter` is excluded from the
+frozen build, so `AQUACROP_NO_PROGRESS` is redundant there. The pycrucible
+launcher runs against a `uv` environment where `tkinter` is available, so the
+window does appear unless the variable is set.
+
 ## Building a standalone executable
 
 Neither toolchain cross-compiles: build on the operating system you are
