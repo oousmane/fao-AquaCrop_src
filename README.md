@@ -59,16 +59,39 @@ python3 src/aquacrop.py
 With no `LIST/` in the current directory, this falls back to `testcase/` and runs
 the bundled Ottawa project.
 
-To build the executable:
+## Building a standalone executable
+
+Neither toolchain cross-compiles: build on the operating system you are
+targeting. Either way, copy the resulting executable into a directory holding
+`LIST/`, `PARAM/`, `SIMUL/`, `DATA/`, `OBS/` and an empty `OUTP/`, and run it
+from there. Both produce the same results on the Ottawa project.
+
+### PyInstaller
 
 ```bash
 pip install pyinstaller
 pyinstaller --clean --noconfirm aquacrop.spec
 ```
 
-PyInstaller does not cross-compile, so run it on the operating system you are
-targeting. Then copy `dist/aquacrop` into a directory holding `LIST/`, `PARAM/`,
-`SIMUL/`, `DATA/`, `OBS/` and an empty `OUTP/`, and run it from there.
+Writes a self-contained `dist/aquacrop` of about 29 MB. It needs no network
+access and leaves nothing behind when it runs.
+
+### pycrucible
+
+```bash
+pip install pycrucible
+pycrucible -e . -o ./aquacrop-pyc
+```
+
+Writes a 5 MB launcher which embeds the sources and `uv`, configured by the
+`[tool.pycrucible]` section of `pyproject.toml`.
+
+The launcher is small because it does not carry a Python interpreter: on its
+first run it **needs network access**, and it extracts a `pycrucible_payload/`
+directory of roughly 60 MB next to itself, holding the sources and the
+environment `uv` resolves for them. Later runs reuse that directory. Prefer
+PyInstaller where the machine is offline or the runtime directory must stay
+clean.
 
 ## Known deviation from the reference output
 

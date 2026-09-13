@@ -3,3 +3,7 @@ numpy>=1.26
 
 # Build dependency: freezes the source into a standalone executable (aquacrop.spec)
 pyinstaller>=6.10
+
+# Build dependency: bundles the sources and uv into a single launcher
+# (configured in pyproject.toml, [tool.pycrucible])
+pycrucible>=0.4.8
