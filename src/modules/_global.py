@@ -449,13 +449,17 @@ def dbg_r(name, val):
 
 # PATH
 
-# Data dirs (LIST/, OUTP/, PARAM/, SIMUL/): next to the executable when frozen,
-# else <project root>/testcase/. Trailing separator required: callers concatenate.
+# Data dirs (LIST/, PARAM/, SIMUL/, OUTP/, DATA/, OBS/): the current directory if it
+# holds LIST/, else next to the executable when frozen, else <project root>/testcase/.
 if getattr(sys, "frozen", False):
-    complete_path_dir = os.path.dirname(os.path.abspath(sys.executable)) + os.sep
+    _fallback_dir = os.path.dirname(os.path.abspath(sys.executable))
 else:
-    _this_dir = os.path.dirname(os.path.abspath(__file__))
-    complete_path_dir = os.path.join(_this_dir, "..", "..", "testcase") + os.sep
+    _fallback_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "testcase")
+
+_cwd = os.path.abspath(os.getcwd())
+_base_dir = _cwd if os.path.isdir(os.path.join(_cwd, "LIST")) else _fallback_dir
+# Trailing separator required: callers concatenate.
+complete_path_dir = os.path.join(_base_dir, "")
 
 
 # Calendar -> Global variables
