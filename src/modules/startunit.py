@@ -142,10 +142,9 @@ def fProjects_open(filename, mode):
     try:
         fProjects = open(filename, mode)
     except OSError as exc:
-        # Ne pas echouer silencieusement : sans ce signal, l'erreur ne se
-        # manifeste que plus tard par un AttributeError sur fProjects.write
+        # Without this, the failure only surfaces later as AttributeError on fProjects.write
         warnings.warn(
-            f"fProjects_open: impossible d'ouvrir {filename!r} ({exc.strerror})",
+            f"fProjects_open: cannot open {filename!r} ({exc.strerror})",
             RuntimeWarning,
             stacklevel=2,
         )
