@@ -449,17 +449,25 @@ def dbg_r(name, val):
 
 # PATH
 
-# Data dirs (LIST/, PARAM/, SIMUL/, OUTP/, DATA/, OBS/): the current directory if it
-# holds LIST/, else next to the executable when frozen, else <project root>/testcase/.
-if getattr(sys, "frozen", False):
-    _fallback_dir = os.path.dirname(os.path.abspath(sys.executable))
-else:
-    _fallback_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "testcase")
+# Data dirs (LIST/, PARAM/, SIMUL/, OUTP/, DATA/, OBS/): the first candidate holding
+# a LIST/ wins, so the model runs from the current directory, from beside a frozen
+# executable, or from beside a launcher that unpacked these sources below it.
+def _find_data_dir() -> str:
+    here = os.path.dirname(os.path.abspath(__file__))
+    candidates = [os.path.abspath(os.getcwd())]
+    if getattr(sys, "frozen", False):
+        candidates.append(os.path.dirname(os.path.abspath(sys.executable)))
+    parent = here
+    for _ in range(4):
+        parent = os.path.dirname(parent)
+        candidates += [parent, os.path.join(parent, "testcase")]
+    for base in candidates:
+        if os.path.isdir(os.path.join(base, "LIST")):
+            return base
+    return os.path.join(here, "..", "..", "testcase")
 
-_cwd = os.path.abspath(os.getcwd())
-_base_dir = _cwd if os.path.isdir(os.path.join(_cwd, "LIST")) else _fallback_dir
 # Trailing separator required: callers concatenate.
-complete_path_dir = os.path.join(_base_dir, "")
+complete_path_dir = os.path.join(_find_data_dir(), "")
 
 
 # Calendar -> Global variables

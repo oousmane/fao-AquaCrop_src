@@ -20,9 +20,10 @@ results have not been validated beyond the single test case described below.
 
 ## What was changed
 
-- **Runtime directory lookup.** The model resolves `LIST/`, `PARAM/`, `SIMUL/`,
-  `OUTP/`, `DATA/` and `OBS/` from the current directory when it holds a `LIST/`,
-  and falls back to the executable's own directory, then to `testcase/`. Upstream
+- **Runtime directory lookup.** The model finds `LIST/`, `PARAM/`, `SIMUL/`,
+  `OUTP/`, `DATA/` and `OBS/` by taking the first candidate that holds a `LIST/`:
+  the current directory, then the executable's own directory when frozen, then
+  the directories above the sources and their `testcase/` subdirectory. Upstream
   resolved them relative to the process working directory, which only worked when
   the model was launched from one specific place.
 - **Packaging.** `aquacrop.spec` (PyInstaller) and a `[tool.pycrucible]` section
@@ -92,6 +93,12 @@ directory of roughly 60 MB next to itself, holding the sources and the
 environment `uv` resolves for them. Later runs reuse that directory. Prefer
 PyInstaller where the machine is offline or the runtime directory must stay
 clean.
+
+Because the sources are then run by an interpreter rather than frozen,
+`sys.frozen` is not set and the data directories are located by searching
+upward from the unpacked sources instead. Both layouts work: the data
+directories may sit beside the launcher, or the launcher may sit inside the
+directory that holds them.
 
 ## Known deviation from the reference output
 
